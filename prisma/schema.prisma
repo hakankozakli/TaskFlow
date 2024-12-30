@@ -1,0 +1,361 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model admin_settings {
+  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  key         String    @unique
+  value       Json
+  description String?
+  created_at  DateTime? @default(now()) @db.Timestamptz(6)
+  updated_at  DateTime? @default(now()) @db.Timestamptz(6)
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model audit_logs {
+  id              String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  organization_id String?        @db.Uuid
+  user_id         String?        @db.Uuid
+  action          String
+  entity_type     String
+  entity_id       String?
+  changes         Json?
+  ip_address      String?
+  user_agent      String?
+  created_at      DateTime?      @default(now()) @db.Timestamptz(6)
+  organizations   organizations? @relation(fields: [organization_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  users           users?         @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([created_at], map: "idx_audit_logs_created_at")
+  @@index([organization_id], map: "idx_audit_logs_org_id")
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model billing_details {
+  id              String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  organization_id String?        @db.Uuid
+  company_name    String?
+  address_line1   String?
+  address_line2   String?
+  city            String?
+  state           String?
+  postal_code     String?
+  country         String?
+  vat_number      String?
+  billing_email   String?
+  phone           String?
+  created_at      DateTime?      @default(now()) @db.Timestamptz(6)
+  updated_at      DateTime?      @default(now()) @db.Timestamptz(6)
+  organizations   organizations? @relation(fields: [organization_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model comments {
+  id         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  content    String
+  task_id    String?   @db.Uuid
+  user_id    String?   @db.Uuid
+  mentions   Json?
+  created_at DateTime? @default(now()) @db.Timestamptz(6)
+  updated_at DateTime? @default(now()) @db.Timestamptz(6)
+  tasks      tasks?    @relation(fields: [task_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  users      users?    @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model epics {
+  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title       String
+  description String?
+  status      String    @default("in_progress")
+  priority    String    @default("medium")
+  project_id  String?   @db.Uuid
+  owner_id    String?   @db.Uuid
+  start_date  DateTime? @db.Timestamptz(6)
+  due_date    DateTime? @db.Timestamptz(6)
+  progress    Int?      @default(0)
+  created_at  DateTime? @default(now()) @db.Timestamptz(6)
+  updated_at  DateTime? @default(now()) @db.Timestamptz(6)
+  users       users?    @relation(fields: [owner_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  projects    projects? @relation(fields: [project_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  tasks       tasks[]
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model feature_flags {
+  id                    String                  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name                  String                  @unique
+  description           String?
+  enabled               Boolean?                @default(false)
+  rules                 Json?                   @default("{}")
+  created_at            DateTime?               @default(now()) @db.Timestamptz(6)
+  updated_at            DateTime?               @default(now()) @db.Timestamptz(6)
+  organization_features organization_features[]
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model invoices {
+  id                String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  organization_id   String?        @db.Uuid
+  subscription_id   String?        @db.Uuid
+  stripe_invoice_id String?        @unique
+  amount            Decimal        @db.Decimal(10, 2)
+  status            String
+  paid_at           DateTime?      @db.Timestamptz(6)
+  invoice_pdf_url   String?
+  created_at        DateTime?      @default(now()) @db.Timestamptz(6)
+  updated_at        DateTime?      @default(now()) @db.Timestamptz(6)
+  organizations     organizations? @relation(fields: [organization_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  subscriptions     subscriptions? @relation(fields: [subscription_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model labels {
+  id              String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name            String
+  color           String
+  organization_id String?        @db.Uuid
+  created_at      DateTime?      @default(now()) @db.Timestamptz(6)
+  organizations   organizations? @relation(fields: [organization_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  task_labels     task_labels[]
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model organization_features {
+  organization_id String        @db.Uuid
+  feature_id      String        @db.Uuid
+  enabled         Boolean?      @default(false)
+  config          Json?         @default("{}")
+  created_at      DateTime?     @default(now()) @db.Timestamptz(6)
+  feature_flags   feature_flags @relation(fields: [feature_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  organizations   organizations @relation(fields: [organization_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@id([organization_id, feature_id])
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model organizations {
+  id                    String                  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name                  String
+  slug                  String                  @unique
+  description           String?
+  industry              String?
+  size                  String?
+  logo                  String?
+  max_users             Int?
+  max_projects          Int?
+  max_storage_gb        Int?
+  created_by            String?                 @db.Uuid
+  created_at            DateTime?               @default(now()) @db.Timestamptz(6)
+  updated_at            DateTime?               @default(now()) @db.Timestamptz(6)
+  audit_logs            audit_logs[]
+  billing_details       billing_details[]
+  invoices              invoices[]
+  labels                labels[]
+  organization_features organization_features[]
+  users                 users?                  @relation(fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  projects              projects[]
+  subscriptions         subscriptions[]
+  teams                 teams[]
+  user_organizations    user_organizations[]
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model projects {
+  id              String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name            String
+  description     String?
+  status          String         @default("active")
+  visibility      String         @default("private")
+  organization_id String?        @db.Uuid
+  start_date      DateTime?      @db.Timestamptz(6)
+  due_date        DateTime?      @db.Timestamptz(6)
+  archived        Boolean?       @default(false)
+  created_at      DateTime?      @default(now()) @db.Timestamptz(6)
+  updated_at      DateTime?      @default(now()) @db.Timestamptz(6)
+  epics           epics[]
+  organizations   organizations? @relation(fields: [organization_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  tasks           tasks[]
+
+  @@index([organization_id], map: "idx_projects_org_id")
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model subscription_plans {
+  id              String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name            String
+  description     String?
+  price           Decimal         @db.Decimal(10, 2)
+  interval        String          @default("month")
+  stripe_price_id String?         @unique
+  features        Json?           @default("{}")
+  is_active       Boolean?        @default(true)
+  created_at      DateTime?       @default(now()) @db.Timestamptz(6)
+  updated_at      DateTime?       @default(now()) @db.Timestamptz(6)
+  subscriptions   subscriptions[]
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model subscriptions {
+  id                     String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  organization_id        String?             @db.Uuid
+  plan_id                String?             @db.Uuid
+  status                 String              @default("inactive")
+  stripe_subscription_id String?             @unique
+  stripe_customer_id     String?
+  current_period_start   DateTime?           @db.Timestamptz(6)
+  current_period_end     DateTime?           @db.Timestamptz(6)
+  cancel_at_period_end   Boolean?            @default(false)
+  canceled_at            DateTime?           @db.Timestamptz(6)
+  trial_start            DateTime?           @db.Timestamptz(6)
+  trial_end              DateTime?           @db.Timestamptz(6)
+  created_at             DateTime?           @default(now()) @db.Timestamptz(6)
+  updated_at             DateTime?           @default(now()) @db.Timestamptz(6)
+  invoices               invoices[]
+  organizations          organizations?      @relation(fields: [organization_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  subscription_plans     subscription_plans? @relation(fields: [plan_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model task_labels {
+  task_id    String    @db.Uuid
+  label_id   String    @db.Uuid
+  created_at DateTime? @default(now()) @db.Timestamptz(6)
+  labels     labels    @relation(fields: [label_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  tasks      tasks     @relation(fields: [task_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@id([task_id, label_id])
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model tasks {
+  id                 String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title              String
+  description        String?
+  status             String           @default("todo")
+  priority           String           @default("medium")
+  project_id         String?          @db.Uuid
+  epic_id            String?          @db.Uuid
+  assignee_id        String?          @db.Uuid
+  parent_id          String?          @db.Uuid
+  order              Int              @default(0)
+  start_date         DateTime?        @db.Timestamptz(6)
+  due_date           DateTime?        @db.Timestamptz(6)
+  original_estimate  Decimal?         @db.Decimal(10, 2)
+  remaining_estimate Decimal?         @db.Decimal(10, 2)
+  time_spent         Decimal?         @default(0) @db.Decimal(10, 2)
+  created_at         DateTime?        @default(now()) @db.Timestamptz(6)
+  updated_at         DateTime?        @default(now()) @db.Timestamptz(6)
+  comments           comments[]
+  task_labels        task_labels[]
+  users              users?           @relation(fields: [assignee_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  epics              epics?           @relation(fields: [epic_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  tasks              tasks?           @relation("tasksTotasks", fields: [parent_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  other_tasks        tasks[]          @relation("tasksTotasks")
+  projects           projects?        @relation(fields: [project_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  time_entries       time_entries[]
+  time_estimates     time_estimates[]
+
+  @@index([epic_id], map: "idx_tasks_epic_id")
+  @@index([project_id], map: "idx_tasks_project_id")
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model team_members {
+  team_id    String    @db.Uuid
+  user_id    String    @db.Uuid
+  role       String    @default("member")
+  created_at DateTime? @default(now()) @db.Timestamptz(6)
+  teams      teams     @relation(fields: [team_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  users      users     @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@id([team_id, user_id])
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model teams {
+  id              String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name            String
+  description     String?
+  organization_id String?        @db.Uuid
+  created_at      DateTime?      @default(now()) @db.Timestamptz(6)
+  updated_at      DateTime?      @default(now()) @db.Timestamptz(6)
+  team_members    team_members[]
+  organizations   organizations? @relation(fields: [organization_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model time_entries {
+  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  task_id     String?   @db.Uuid
+  user_id     String?   @db.Uuid
+  duration    Int
+  description String?
+  started_at  DateTime  @db.Timestamptz(6)
+  ended_at    DateTime? @db.Timestamptz(6)
+  billable    Boolean?  @default(false)
+  created_at  DateTime? @default(now()) @db.Timestamptz(6)
+  updated_at  DateTime? @default(now()) @db.Timestamptz(6)
+  tasks       tasks?    @relation(fields: [task_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  users       users?    @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([task_id], map: "idx_time_entries_task_id")
+  @@index([user_id], map: "idx_time_entries_user_id")
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model time_estimates {
+  id              String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  task_id         String?   @db.Uuid
+  estimated_hours Decimal   @db.Decimal(10, 2)
+  notes           String?
+  created_by      String?   @db.Uuid
+  created_at      DateTime? @default(now()) @db.Timestamptz(6)
+  updated_at      DateTime? @default(now()) @db.Timestamptz(6)
+  users           users?    @relation(fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  tasks           tasks?    @relation(fields: [task_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model user_organizations {
+  user_id         String        @db.Uuid
+  organization_id String        @db.Uuid
+  is_primary      Boolean?      @default(false)
+  role            String        @default("member")
+  created_at      DateTime?     @default(now()) @db.Timestamptz(6)
+  organizations   organizations @relation(fields: [organization_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  users           users         @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@id([user_id, organization_id])
+  @@index([organization_id], map: "idx_user_orgs_org_id")
+  @@index([user_id], map: "idx_user_orgs_user_id")
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model users {
+  id                 String               @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  email              String               @unique
+  name               String?
+  avatar             String?
+  status             String?              @default("active")
+  is_admin           Boolean?             @default(false)
+  last_active_at     DateTime?            @db.Timestamptz(6)
+  created_at         DateTime?            @default(now()) @db.Timestamptz(6)
+  updated_at         DateTime?            @default(now()) @db.Timestamptz(6)
+  audit_logs         audit_logs[]
+  comments           comments[]
+  epics              epics[]
+  organizations      organizations[]
+  tasks              tasks[]
+  team_members       team_members[]
+  time_entries       time_entries[]
+  time_estimates     time_estimates[]
+  user_organizations user_organizations[]
+}

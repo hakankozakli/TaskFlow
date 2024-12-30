@@ -1,0 +1,40 @@
+{
+  "common": {
+    "welcome": "Bienvenido de nuevo",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "signIn": "Iniciar sesión",
+    "signUp": "Registrarse",
+    "loading": "Cargando...",
+    "error": "Ocurrió un error",
+    "success": "Éxito"
+  },
+  "auth": {
+    "noAccount": "¿No tienes una cuenta?",
+    "createAccount": "Crear una cuenta",
+    "forgotPassword": "¿Olvidaste tu contraseña?",
+    "loginSuccess": "Sesión iniciada correctamente",
+    "loginError": "Error al iniciar sesión"
+  },
+  "nav": {
+    "dashboard": "Panel",
+    "projects": "Proyectos",
+    "team": "Equipo",
+    "settings": "Ajustes",
+    "features": "Características",
+    "pricing": "Precios",
+    "about": "Acerca de"
+  },
+  "landing": {
+    "hero": {
+      "title": "Una Mejor Manera de Trabajar",
+      "subtitle": "La plataforma todo en uno que hace que el trabajo en equipo funcione",
+      "cta": "Comenzar Gratis",
+      "viewPricing": "Ver Precios"
+    },
+    "features": {
+      "title": "Todo lo que Necesitas para Tener Éxito",
+      "subtitle": "Potentes funciones para mantener a tu equipo organizado"
+    }
+  }
+}

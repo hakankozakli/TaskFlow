@@ -1,0 +1,47 @@
+{
+  "common": {
+    "welcome": "Welcome back",
+    "email": "Email",
+    "password": "Password",
+    "signIn": "Sign in",
+    "signUp": "Sign up",
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "success": "Success",
+    "notFound": "Page Not Found",
+    "notFoundMessage": "The page you're looking for doesn't exist.",
+    "returnHome": "Return Home",
+    "errorMessage": "Something went wrong!",
+    "tryAgain": "Try again"
+  },
+  "auth": {
+    "noAccount": "Don't have an account?",
+    "createAccount": "Create an account",
+    "forgotPassword": "Forgot password?",
+    "loginSuccess": "Logged in successfully",
+    "loginError": "Failed to login"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "projects": "Projects",
+    "team": "Team",
+    "settings": "Settings",
+    "features": "Features",
+    "pricing": "Pricing",
+    "about": "About",
+    "login": "Sign in",
+    "signup": "Sign up"
+  },
+  "landing": {
+    "hero": {
+      "title": "A Better Way to Get Work Done",
+      "subtitle": "The all-in-one platform that makes teamwork click",
+      "cta": "Get Started Free",
+      "viewPricing": "View Pricing"
+    },
+    "features": {
+      "title": "Everything You Need to Succeed",
+      "subtitle": "Powerful features to help your team stay organized"
+    }
+  }
+}

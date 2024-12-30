@@ -1,0 +1,40 @@
+{
+  "common": {
+    "welcome": "Willkommen zurück",
+    "email": "E-Mail",
+    "password": "Passwort",
+    "signIn": "Anmelden",
+    "signUp": "Registrieren",
+    "loading": "Laden...",
+    "error": "Ein Fehler ist aufgetreten",
+    "success": "Erfolg"
+  },
+  "auth": {
+    "noAccount": "Noch kein Konto?",
+    "createAccount": "Konto erstellen",
+    "forgotPassword": "Passwort vergessen?",
+    "loginSuccess": "Erfolgreich angemeldet",
+    "loginError": "Anmeldung fehlgeschlagen"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "projects": "Projekte",
+    "team": "Team",
+    "settings": "Einstellungen",
+    "features": "Funktionen",
+    "pricing": "Preise",
+    "about": "Über uns"
+  },
+  "landing": {
+    "hero": {
+      "title": "Ein besserer Weg zur Arbeit",
+      "subtitle": "Die All-in-One-Plattform, die Teamarbeit zum Klicken bringt",
+      "cta": "Kostenlos starten",
+      "viewPricing": "Preise ansehen"
+    },
+    "features": {
+      "title": "Alles was Sie zum Erfolg brauchen",
+      "subtitle": "Leistungsstarke Funktionen, um Ihr Team organisiert zu halten"
+    }
+  }
+}
