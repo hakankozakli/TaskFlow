@@ -1,10 +1,9 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { createBrowserClient } from '@supabase/ssr';
 import { useRouter } from 'next/navigation';
 import { useSession } from '@/lib/auth/session-provider';
-import { db } from '@/lib/db';
+import { Api } from '@/lib/api';
 
 export function useOrganization() {
   const [loading, setLoading] = useState(true);
@@ -18,25 +17,12 @@ export function useOrganization() {
         setLoading(false);
         return;
       }
-
+      
       try {
         
-        
+        const api = new Api('http://localhost:3000', session.access_token); 
+        const memberships = await api.get('resource/user_organizations', { page: 1, limit: 10 });
 
-        console.log(await db.user_organizations.findFirst({
-          where: {
-            user_id: session.user.id
-          }
-        }));
-        // Check if user has any organization memberships
-        const { data: memberships, error } = await supabase
-          .from('user_organizations')
-          .select('organization_id, is_primary')
-          .eq('user_id', session.user.id)
-          .limit(1);
-        
-        if (error) throw error;
-        
         if (!memberships?.length) {
           router.push('/onboarding/organization');
           setHasOrganization(false);

@@ -1,6 +1,6 @@
 'use client';
 
-import { Dialog, DialogContent, DialogHeader } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Task } from '@/types/projects';
 import { X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -43,6 +43,7 @@ export function TaskDialog({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-4xl h-screen p-0 m-0">
+        <VisuallyHidden><DialogTitle /></VisuallyHidden>
         <div className="h-full flex flex-col">
           <DialogHeader className="flex-shrink-0 p-6 border-b">
             <div className="space-y-4">
