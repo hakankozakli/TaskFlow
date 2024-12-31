@@ -7,7 +7,12 @@
     "signUp": "Registrarse",
     "loading": "Cargando...",
     "error": "Ocurrió un error",
-    "success": "Éxito"
+    "success": "Éxito",
+    "notFound": "Página No Encontrada",
+    "notFoundMessage": "La página que buscas no existe.",
+    "returnHome": "Volver al Inicio",
+    "errorMessage": "¡Algo salió mal!",
+    "tryAgain": "Intentar de nuevo"
   },
   "auth": {
     "noAccount": "¿No tienes una cuenta?",
@@ -23,7 +28,9 @@
     "settings": "Ajustes",
     "features": "Características",
     "pricing": "Precios",
-    "about": "Acerca de"
+    "about": "Acerca de",
+    "login": "Iniciar sesión",
+    "signup": "Registrarse"
   },
   "landing": {
     "hero": {

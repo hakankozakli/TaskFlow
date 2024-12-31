@@ -16,3 +16,11 @@ export interface UserFormData {
   role: 'admin' | 'member';
   avatar?: string;
 }
+
+export interface UserOrganization {
+  id: string
+  user_id: string
+  organization_id: string
+  role: 'owner' | 'admin' | 'member'
+  created_at: string
+}

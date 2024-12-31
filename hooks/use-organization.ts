@@ -20,8 +20,8 @@ export function useOrganization() {
       
       try {
         
-        const api = new Api('http://localhost:3000', session.access_token); 
-        const memberships = await api.get('resource/user_organizations', { page: 1, limit: 10 });
+        const api = new Api('resource', session.access_token); 
+        const memberships = await api.get('user_organizations', { page: 1, limit: 10 });
 
         if (!memberships?.length) {
           router.push('/onboarding/organization');

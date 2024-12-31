@@ -2,7 +2,7 @@
 
 import { ThemeProvider } from '@/components/providers/theme-provider';
 import { SessionProvider } from '@/lib/auth/session-provider';
-import { DataProvider } from '@/lib/providers/data-provider';
+import { DataProvider } from '@/app/providers/data-provider';
 import { NextIntlClientProvider } from 'next-intl';
 
 interface ClientLayoutProps {

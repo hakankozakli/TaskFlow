@@ -1,6 +1,6 @@
 'use client';
 
-import { useData } from '@/lib/providers/data-provider';
+import { useData } from '@/app/providers/data-provider';
 import { Project, Task } from '@/types/projects';
 import * as projectService from '@/lib/services/projects';
 import * as taskService from '@/lib/services/tasks';

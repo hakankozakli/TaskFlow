@@ -4,7 +4,6 @@ import { DashboardNav } from '@/components/dashboard/nav';
 import { MainHeader } from '@/components/dashboard/main-header';
 import { ProjectProvider } from '@/components/providers/project-provider';
 import { useSession } from '@/lib/auth/session-provider';
-import { useOrganization } from '@/lib/hooks/use-organization';
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { LoadingScreen } from '@/components/auth/loading-screen';
@@ -15,7 +14,6 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const { session, loading: sessionLoading } = useSession();
-  const { loading: orgLoading, hasOrganization } = useOrganization();
   const router = useRouter();
 
   useEffect(() => {
@@ -24,7 +22,7 @@ export default function DashboardLayout({
     }
   }, [session, sessionLoading, router]);
 
-  if (sessionLoading || orgLoading) {
+  if (sessionLoading) {
     return <LoadingScreen />;
   }
 
@@ -32,9 +30,6 @@ export default function DashboardLayout({
     return null;
   }
 
-  if (!hasOrganization) {
-    return null;
-  }
 
   return (
     <ProjectProvider>

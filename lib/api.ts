@@ -3,14 +3,14 @@ import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 export class Api {
   private axiosInstance: AxiosInstance;
 
-  constructor(baseUrl: string, token: string | null = null) {
+  constructor(path: string, token: string | null = null) {
     this.axiosInstance = axios.create({
-      baseURL: `${baseUrl}/api/`,
+      baseURL: `/api/${path}`,
       headers: {
         'Content-Type': 'application/json',
       },
     });
-    
+
     if (token) {
       this.setToken(token);
     }
