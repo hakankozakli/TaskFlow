@@ -1,10 +1,10 @@
 import './globals.css';
-import { Inter } from 'next/font/google';
+import { Inter,Lexend, Red_Hat_Text,Onest, Montserrat } from 'next/font/google';
 import { ClientLayout } from '@/components/client-layout';
-import {getLocale, getMessages} from 'next-intl/server';
+import {getLocale, getMessages, getTimeZone} from 'next-intl/server';
 import { Toaster } from '@/components/ui/sonner';
 
-const inter = Inter({ subsets: ['latin'] });
+const inter = Onest({ subsets: ['latin'] });
 
 export default async function RootLayout({
   children,
@@ -13,11 +13,12 @@ export default async function RootLayout({
 }) {
   const messages = await getMessages();
   const locale = await getLocale();
+  const timezone = await getTimeZone();
   
   return (
     <html lang={locale} suppressHydrationWarning>
       <body className={inter.className}>
-        <ClientLayout locale={locale} messages={messages}>
+        <ClientLayout locale={locale} timezone={timezone} messages={messages}>
           {children}
         </ClientLayout>
         <Toaster />

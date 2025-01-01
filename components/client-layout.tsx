@@ -1,30 +1,34 @@
 'use client';
 
 import { ThemeProvider } from '@/components/providers/theme-provider';
-import { SessionProvider } from '@/lib/auth/session-provider';
 import { DataProvider } from '@/app/providers/data-provider';
+import { AuthProvider } from '@/app/providers/auth-provider';
+import { fetchAuthState } from '@/lib/auth/fetcher';
 import { NextIntlClientProvider } from 'next-intl';
 
 interface ClientLayoutProps {
   children: React.ReactNode;
   locale: string;
+  timezone: string;
   messages: any;
 }
 
-export function ClientLayout({ children, locale, messages }: ClientLayoutProps) {
+export async function ClientLayout({ children, locale, timezone, messages }: ClientLayoutProps) {
+
+  const initialState = await fetchAuthState()
   return (
-    <NextIntlClientProvider locale={locale} messages={messages}>
+    <NextIntlClientProvider locale={locale} timeZone={timezone} messages={messages}>
       <ThemeProvider
         attribute="class"
         defaultTheme="system"
         enableSystem
         disableTransitionOnChange
       >
-        <SessionProvider>
+        <AuthProvider initialState={initialState}>
           <DataProvider>
             {children}
           </DataProvider>
-        </SessionProvider>
+        </AuthProvider>
       </ThemeProvider>
     </NextIntlClientProvider>
   );

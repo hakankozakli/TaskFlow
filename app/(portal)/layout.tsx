@@ -3,7 +3,7 @@
 import { DashboardNav } from '@/components/dashboard/nav';
 import { MainHeader } from '@/components/dashboard/main-header';
 import { ProjectProvider } from '@/components/providers/project-provider';
-import { useSession } from '@/lib/auth/session-provider';
+import { useAuth } from '@/app/providers/auth-provider';
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { LoadingScreen } from '@/components/auth/loading-screen';
@@ -13,20 +13,20 @@ export default function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { session, loading: sessionLoading } = useSession();
+  const { user, organization, isLoading } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
-    if (!sessionLoading && !session) {
+    if (!isLoading && !user) {
       router.push('/login');
     }
-  }, [session, sessionLoading, router]);
+  }, [user, isLoading, router]);
 
-  if (sessionLoading) {
+  if (isLoading) {
     return <LoadingScreen />;
   }
 
-  if (!session) {
+  if (!user) {
     return null;
   }
 
