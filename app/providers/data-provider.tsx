@@ -3,7 +3,7 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { Project, Task } from '@/types/projects';
-import { useSession } from '@/lib/auth/session-provider';
+import { useAuth } from '@/app/providers/auth-provider';
 import * as projectService from '@/lib/services/projects';
 import * as taskService from '@/lib/services/tasks';
 
@@ -30,7 +30,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
-  const { session } = useSession();
+  const { user } = useAuth();
 
   const refreshProjects = async () => {
     try {
@@ -51,7 +51,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
   };
 
   useEffect(() => {
-    if (!session) return;
+    if (!user) return;
 
     const supabase = createClient();
 
@@ -81,7 +81,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
       projectsSubscription.unsubscribe();
       tasksSubscription.unsubscribe();
     };
-  }, [session]);
+  }, [user]);
 
   return (
     <DataContext.Provider 

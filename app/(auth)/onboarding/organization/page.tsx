@@ -1,19 +1,19 @@
 'use client';
 
 import { OrganizationOnboarding } from '@/components/auth/onboarding/organization/organization-onboarding';
-import { useSession } from '@/lib/auth/session-provider';
+import { useAuth } from '@/app/providers/auth-provider';
 import { LoadingScreen } from '@/components/auth/loading-screen';
 import { useRouter } from 'next/navigation';
 
 export default function OrganizationOnboardingPage() {
-  const { session, loading } = useSession();
+  const { user, isLoading: loading } = useAuth();
   const router = useRouter();
 
   if (loading) {
     return <LoadingScreen />;
   }
 
-  if (!session) {
+  if (!user) {
     router.push('/login');
     return null;
   }

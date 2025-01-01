@@ -13,6 +13,7 @@ export async function fetchAuthState(): Promise<AuthState> {
   // Return initial state if no session
   if (!session) {
     return {
+      session: null,
       user: null,
       organization: null,
       organizations: [],
@@ -48,6 +49,7 @@ export async function fetchAuthState(): Promise<AuthState> {
 
   if (!activeOrgId) {
     return {
+      session,
       user: session.user,
       organization: null,
       organizations: [],
@@ -64,6 +66,7 @@ export async function fetchAuthState(): Promise<AuthState> {
   ) ?? null
 
   return {
+    session,
     user: session.user,
     organization: activeOrganization ?? null,
     organizations,

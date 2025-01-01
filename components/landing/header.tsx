@@ -3,13 +3,13 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Kanban } from 'lucide-react';
-import { useSession } from '@/lib/auth/session-provider';
+import { useAuth } from '@/app/providers/auth-provider';
 import { ModeToggle } from '../mode-toggle';
 import {useTranslations} from 'next-intl';
 import { LanguageSelector } from '@/components/language/language-selector';
 
 export function Header() {
-  const { session } = useSession();
+  const { session } = useAuth();
   const t = useTranslations('nav');
   
   return (

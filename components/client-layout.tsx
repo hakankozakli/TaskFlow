@@ -3,8 +3,8 @@
 import { ThemeProvider } from '@/components/providers/theme-provider';
 import { DataProvider } from '@/app/providers/data-provider';
 import { AuthProvider } from '@/app/providers/auth-provider';
-import { fetchAuthState } from '@/lib/auth/fetcher';
 import { NextIntlClientProvider } from 'next-intl';
+import { SWRProvider } from '@/app/providers/swr-provider';
 
 interface ClientLayoutProps {
   children: React.ReactNode;
@@ -13,9 +13,7 @@ interface ClientLayoutProps {
   messages: any;
 }
 
-export async function ClientLayout({ children, locale, timezone, messages }: ClientLayoutProps) {
-
-  const initialState = await fetchAuthState()
+export function ClientLayout({ children, locale, timezone, messages }: ClientLayoutProps) {
   return (
     <NextIntlClientProvider locale={locale} timeZone={timezone} messages={messages}>
       <ThemeProvider
@@ -24,11 +22,13 @@ export async function ClientLayout({ children, locale, timezone, messages }: Cli
         enableSystem
         disableTransitionOnChange
       >
-        <AuthProvider initialState={initialState}>
+        <SWRProvider>
+        <AuthProvider>
           <DataProvider>
             {children}
           </DataProvider>
         </AuthProvider>
+        </SWRProvider>
       </ThemeProvider>
     </NextIntlClientProvider>
   );

@@ -1,8 +1,9 @@
-import { User } from '@supabase/supabase-js'
+import { User, Session } from '@supabase/supabase-js'
 import { Organization } from './organization'
 import { UserOrganization } from './user'
 
 export interface AuthState {
+    session: Session | null
     user: User | null
     organization: Organization | null
     organizations: Organization[]

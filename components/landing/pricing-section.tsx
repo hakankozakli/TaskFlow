@@ -2,12 +2,12 @@
 
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
-import { useSession } from '@/lib/auth/session-provider';
+import { useAuth } from '@/app/providers/auth-provider';
 import { CheckCircle2 } from 'lucide-react';
 
 export function PricingSection() {
   const router = useRouter();
-  const { session } = useSession();
+  const { session } = useAuth();
 
   const handlePricingClick = (plan: 'free' | 'pro' | 'enterprise') => {
     if (session) {

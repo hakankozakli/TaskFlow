@@ -26,10 +26,6 @@ export default function DashboardLayout({
     return <LoadingScreen />;
   }
 
-  if (!user) {
-    return null;
-  }
-
 
   return (
     <ProjectProvider>

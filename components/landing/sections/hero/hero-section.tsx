@@ -3,7 +3,7 @@
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useSession } from '@/lib/auth/session-provider';
+import { useAuth } from '@/app/providers/auth-provider';
 import { motion } from 'framer-motion';
 import { HeroBadge } from './hero-badge';
 import { HeroStats } from './hero-stats';
@@ -11,7 +11,7 @@ import { HeroPreview } from './hero-preview';
 
 export function HeroSection() {
   const router = useRouter();
-  const { session } = useSession();
+  const { session } = useAuth();
 
   const handleGetStarted = () => {
     if (session) {

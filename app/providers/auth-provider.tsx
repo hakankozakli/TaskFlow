@@ -28,9 +28,10 @@ export function AuthProvider({
 
   // Fetch auth state using SWR
   const { data: authData, mutate: mutateAuth } = useSWR('auth', fetchAuthState, {
-    fallbackData: initialState,
+    revalidateOnFocus: false,
     refreshInterval: 0,
-    revalidateOnFocus: false
+    shouldRetryOnError: false,
+    fallbackData: initialState
   })
 
   // Route protection
@@ -186,9 +187,6 @@ export function AuthProvider({
     return requiredRoles.includes(userRole)
   }
 
-  if (!authData) {
-    return null
-  }
 
   return (
     <AuthContext.Provider

@@ -1,5 +1,5 @@
 import './globals.css';
-import { Inter,Lexend, Red_Hat_Text,Onest, Montserrat } from 'next/font/google';
+import { Inter,Lexend, Red_Hat_Text, Onest, Montserrat } from 'next/font/google';
 import { ClientLayout } from '@/components/client-layout';
 import {getLocale, getMessages, getTimeZone} from 'next-intl/server';
 import { Toaster } from '@/components/ui/sonner';
